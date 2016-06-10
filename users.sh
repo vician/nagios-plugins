@@ -20,6 +20,10 @@ if [ $WARNING -ge $CRITICAL ]; then
 fi
 
 COUNT=$(who | grep -v 'tmux\|S\.' | wc -l)
+COUNT_TMUX=$(who | grep 'tmux' | wc -l)
+COUNT_SCREEN=$($who | grep 'S\.' | wc -l)
+
+MESSAGE="$COUNT users ($COUNT_TMUX tmux, $COUNT_SCREEN screen)"
 
 if [ -z "$COUNT" ]; then
 	echo "Cannot detect number of connected users!"
@@ -27,14 +31,14 @@ if [ -z "$COUNT" ]; then
 fi
 
 if [ $COUNT -lt $WARNING ]; then
-	echo "OK: $COUNT users"
+	echo "OK: $MESSAGE"
 	exit $EXIT_OK
 fi
 
 if [ $COUNT -lt $CRITICAL ]; then
-	echo "WARNING: $COUNT users"
+	echo "WARNING: $MESSAGE"
 	exit $EXIT_WARNING
 fi
 
-echo "CRITICAL: $COUNT users"
+echo "CRITICAL: $MESSAGE"
 exit $EXIT_CRITICAL
