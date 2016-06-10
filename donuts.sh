@@ -32,8 +32,9 @@ if [ $? -eq 0 ]; then
 	echo "OK: No errors found"
 	exit $EXIT_OK
 else
-	echo -n "CRITICAL: "
 	#sudo /usr/sbin/donuts -i DNSSEC_MISSING_RRSIG_RECORD2 $file $domain | grep -i "Errors Found:"
-	echo $RESULT
+	NUMBER=$(echo $RESULT | awk '{print $3}')
+	echo -n "$NUMBER ERRORS: "
+	sudo /usr/sbin/donuts -i DNSSEC_MISSING_RRSIG_RECORD2 $file $domain | grep "Message:" | awk '{$1=""; print $0}'
 	exit $EXIT_CRITICAL
 fi
