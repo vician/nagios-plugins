@@ -47,19 +47,23 @@ FILE2=$(mktemp)
 wget -O $FILE1 --header="Host: $DOMAIN" "$HOST1$URLPATH" --no-check-certificate --max-redirect 0 1>/dev/null 2>/dev/null
 if [ $? -ne 0 ]; then
 	echo "CRITICAL: Cannot download $DOMAIN$URLPATH from $HOST1"
+	rm $FILE1 $FILE2
 	exit $EXIT_CRITICAL
 fi
 wget -O $FILE2 --header="Host: $DOMAIN" "$HOST2$URLPATH" --no-check-certificate --max-redirect 0 1>/dev/null 2>/dev/null
 if [ $? -ne 0 ]; then
 	echo "CRITICAL: Cannot download $DOMAIN$URLPATH from $HOST2"
+	rm $FILE1 $FILE2
 	exit $EXIT_CRITICAL
 fi
 
 diff $FILE1 $FILE2
 if [ $? -ne 0 ]; then
 	echo "CRITICAL: Webpages aren't the same!"
+	rm $FILE1 $FILE2
 	exit $EXIT_CRITICAL
 else
 	echo "OK: Webpages are the same."
+	rm $FILE1 $FILE2
 	exit $EXIT_OK
 fi
