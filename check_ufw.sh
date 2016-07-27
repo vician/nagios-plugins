@@ -14,7 +14,7 @@
 #STATE_DEPENDENT=4
 
 
-STATE=$(ufw status)
+STATE=$(sudo ufw status)
 
         if [[ ! $STATE =~ "active" ]];
         then
