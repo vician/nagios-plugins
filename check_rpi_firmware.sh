@@ -5,7 +5,7 @@ readonly EXIT_WARNING=1
 readonly EXIT_CRITICAL=2
 readonly EXIT_UNKNOW=3
 
-JUST_CHECK=1 rpi-update 1>/dev/null 2>/dev/null
+sudo JUST_CHECK=1 rpi-update 1>/dev/null 2>/dev/null
 STATUS=$?
 
 if [ $STATUS -eq 0 ]; then
