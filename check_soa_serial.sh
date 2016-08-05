@@ -14,12 +14,28 @@ function verbose {
 	echo $*
 }
 
-if [ $# -ne 1 ]; then
+if [ $# -ne 1 ] && [ $# -ne 2 ]; then
 	echo "Missing parametr domain!"
 	exit $EXIT_UNKNOW
 fi
+if [ $# -eq 2 ]; then
+	VERBOSE=1
+fi
 
-readonly domain=$1
+domain=$1
+
+while true ; do
+	# Checking CNAME
+	cname=$(dig +short $domain CNAME )
+	if [ "$cname" ]; then
+		# It is CNAME
+		verbose "CNAME: $domain -> $cname"
+		domain=$cname
+	else
+		verbose "Isn't CNAME"
+		break
+	fi
+done
 
 master=$(dig +short $domain SOA | awk '{print $1}')
 
