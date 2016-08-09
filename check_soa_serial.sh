@@ -38,10 +38,16 @@ while true ; do
 done
 
 master=$(dig +short $domain SOA | awk '{print $1}')
+if [ -z "$master" ]; then
+	verbose "It's not root!"
+	domain=$(dig $domain SOA | grep SOA | grep -v $domain | awk '{print $1}')
+	verbose "New domain: $domain"
+	master=$(dig +short $domain SOA | awk '{print $1}')
+fi
 
 dnss=($(dig $domain NS +short))
 
-verbose "dns count: ${#dnss[@]}"
+verbose "dns count: ${#dnss[@]} (${dnss[*]})"
 
 if [ ${#dnss[@]} -eq 0 ]; then
 	echo "Cannot load NS records!"

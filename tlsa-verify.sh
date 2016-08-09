@@ -19,7 +19,7 @@ if [ ! -f "$PROGRAM" ]; then
 	exit $EXIT_UNKNOW
 fi
 
-TLSA=$(dig +short _443._tcp.$DOMAIN. TLSA)
+TLSA=$(dig +short _443._tcp.$DOMAIN. TLSA @8.8.8.8)
 
 if [ -z "$TLSA" ]; then
 	echo "WARNING: TLSA not found for $DOMAIN!"
