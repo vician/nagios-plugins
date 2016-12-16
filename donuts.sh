@@ -26,14 +26,16 @@ fi
 
 file=/etc/knot/zones/$domain.zone
 
-if [ ! -f $file ]; then
-	echo "ERROR: domain file not found ($file)!"
+temp=$(mktemp)
+terror=$(mktemp)
+
+sudo /usr/sbin/donuts -i DNSSEC_MISSING_RRSIG_RECORD2 $file $domain 2>$terror > $temp
+
+COUNT_ERRORS="$(cat $terror | wc -l)"
+if [ $COUNT_ERRORS -ne 0 ] ; then
+	echo "ERROR: $COUNT_ERRORS errors during donuts"
 	exit $EXIT_UNKNOW
 fi
-
-temp=$(mktemp)
-
-sudo /usr/sbin/donuts -i DNSSEC_MISSING_RRSIG_RECORD2 $file $domain 2>&1 > $temp
 
 COUNT=$(cat $temp | grep "Message:" | grep -v "RRSIG is nearing its expiration time" | wc -l)
 
