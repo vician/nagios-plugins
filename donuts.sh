@@ -26,6 +26,11 @@ fi
 
 file=/etc/knot/zones/$domain.zone
 
+if [ ! -f $file ]; then
+	echo "ERROR: domain file not found ($file)!"
+	exit $EXIT_UNKNOW
+fi
+
 temp=$(mktemp)
 
 sudo /usr/sbin/donuts -i DNSSEC_MISSING_RRSIG_RECORD2 $file $domain 2>&1 > $temp
