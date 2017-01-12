@@ -19,8 +19,8 @@ if [ $warning -lt 0 ] || [ $critical -lt 0 ]; then
 	exit $EXIT_UNKNOW
 fi
 
-if [ $warning -ge $critical ]; then
-	echo "Warning has to be lower than critical!"
+if [ $warning -le $critical ]; then
+	echo "Warning has to be greater than critical!"
 	exit $EXIT_UNKNOW
 fi
 
